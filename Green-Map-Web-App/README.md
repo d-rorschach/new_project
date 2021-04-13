@@ -3,7 +3,7 @@ One click for a green and carbon neutral future
 
 ## Features :sparkles:
 - :red_car: Calculate your Carbon Footprint while travelling from one place to another.
-- :deciduous_tree: Remove Carbon Offset by donating for Tree Plantation using Portis crypto currency wallet.
+- :deciduous_tree: Remove Carbon Offset by donating for Tree Plantation.
 - :four_leaf_clover: Go Carbon Neutral and contribute for a sustainable future.
 - :bike: Choose the right mode of Travel and Get a detailed rout.
 

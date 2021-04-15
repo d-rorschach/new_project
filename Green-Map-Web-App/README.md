@@ -1,4 +1,4 @@
-# Eco-Map
+# Green-Map
 One click for a green and carbon neutral future
 
 ## Features :sparkles:
@@ -21,8 +21,8 @@ One click for a green and carbon neutral future
 2. pip 3
 ### 2. Clone this Repo :
 ```sh
-git clone https://github.com/d-rorschach/Eco-Map.git
-cd Eco-Map-main
+git clone https://github.com/d-rorschach/new_project.git
+cd new_project/Green-Map-Web-App
 ```
 You can also download the folder and extract all the files in your local system.<br>
 Open your IDE install the requirements.

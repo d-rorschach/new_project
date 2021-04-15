@@ -31,6 +31,8 @@ def c_offset(rq):
 
 def aboutus(rq):
     return render(rq, 'mapapp/aboutus.html')
+def resource(rq):
+    return render(rq, 'mapapp/resource.html')
 
 def remove_carbon_footprint(rq):
   if accountholder.objects.filter(user=rq.user).exists():
@@ -43,7 +45,7 @@ def remove_carbon_footprint(rq):
 
   a=accountholder.objects.get(user=rq.user)
   print('*******************')
-  print(a.carbon_footprint)
+  #print((0.9*0.0000065)*a.carbon_footprint)
   param={
         'carbon_footprint':a.carbon_footprint,
         'carbon_offset_cost':(a.carbon_footprint*0.9)

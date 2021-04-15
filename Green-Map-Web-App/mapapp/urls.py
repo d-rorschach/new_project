@@ -8,4 +8,5 @@ urlpatterns = [
     path('c_offset/',views.c_offset,name='c_offset'),
     path('c_offset/remove_carbon_footprint/',views.remove_carbon_footprint,name='remove_carbon_footprint'),
     path('aboutus/',views.aboutus,name='aboutus'),
+    path('resource/', views.resource, name='resource'),
 ]

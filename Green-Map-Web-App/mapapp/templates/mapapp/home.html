@@ -13,7 +13,7 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
 	 crossorigin="anonymous">
 
-
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link href="https://fonts.googleapis.com/css2?family=Slabo+27px&display=swap" rel="stylesheet">
 	<style>
@@ -56,11 +56,12 @@
 
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
+
 				<li class="nav-item active" align="center">
 					<a href="#"><img src="{% static '/images/nvlogo.png' %}" style="height:40px"></a>
       </li>
             <li class="nav-item active">
-              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="/mapapp/">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item active">
                 <a class="nav-link" href="/mapapp/c_offset/">Remove Carbon Offset<span class="sr-only">(current)</span></a>
@@ -68,12 +69,20 @@
               <li class="nav-item active">
                 <a class="nav-link" href="/mapapp/aboutus/">About us<span class="sr-only">(current)</span></a>
               </li>
-        
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Github link
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="https://github.com/d-rorschach" target="_blank">Follow me on Github</a>
+                  <a class="dropdown-item" href="https://github.com/d-rorschach/new_project/tree/main/Green-Map-Web-App" target="_blank">Github code link</a>
+              </li>
           
       </nav>
     <div id='map'></div>
     <div id="instructions"></div>
 
+    
 <div align="center" style="margin-top: 20px">
       <div class="col-md-6"style="text-transform:capitalize; text-align:justify">
           <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
@@ -90,8 +99,17 @@
           <option value="2">walking</option>
           <option value="3">driving</option>
         </select>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            We advice you to use cycling or walking as it keeps you and your environment healthy.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
       </div>
+        
+      <div>
 
+      </div>
       
           <h4>total distance: <span id="distance_value">  0 meters</span></h4>
           <h4>total time required: <span id="time_required">0  seconds</span></h4>
@@ -113,7 +131,8 @@
 <div style="text-align: justify; text-tranform: capitalize; margin-left:20px; padding:0; margin-top:0px">
             <form action="save_user_data/" method="POST">{% csrf_token %}
                 <h4>total carbon footprint: <input type="text" id="carbon_footprint" name="carbon_footprint" placeholder="0" style="width:40%"> kg of C02</h4>
-                <h4>cost to offset the footprint: <span id="offset_cost"> 0 </span> INR</h4>
+                <h4>cost to offset the footprint: <span id="offset_cost_inr"> 0 </span> INR</h4>
+                <!-- <h4>cost to offset the footprint: <span id="offset_cost"> 0 </span> Ether</h4> -->
                 <input style="margin-left:200px; width:200px; margin-bottom:20px" type="submit" value="save" class="btn-primary" >
             </form>
             </div>
@@ -133,34 +152,73 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
         crossorigin="anonymous"></script>
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!-- map scripts -->
+    <script src="https://js.radar.io/v3/radar.min.js"></script>
+    
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
+
 </body>
 
-<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
 <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoicHJheWFzcGFsIiwiYSI6ImNrbTJ5MTF0NTAzNW8yeGxjcDRja3B0dG8ifQ.NQRGpeu6L4I1fLu6-BHgxA';
-
-    var map = new mapboxgl.Map({
-        container: 'map',
-        style: 'mapbox://styles/mapbox/streets-v11',
-        center: [88.36972045898438, 22.569719314575195], // starting position
-        zoom: 13
-    });
-    var canvas = map.getCanvasContainer();
-    var dest_color='#b8b340';
-    var start = [88.36972045898438, 22.569719314575195];
+    Radar.initialize("prj_test_pk_737e26c635ad6458a9569435c72782ea5b07ae3d");
     async function aqi_fun(start, end)
     {
-        const r1=await fetch('https://api.weatherbit.io/v2.0/current/airquality?lat='+start[1]+'&lon='+start[0]+'&key=c64a2e43708941bd9ac4450b13d6c235');
+        const r1=await fetch('https://api.weatherbit.io/v2.0/current/airquality?lat='+start[1]+'&lon='+start[0]+'&key=af38865fdd5640c78d75083bf555ca89');
         const json_obj1 = await r1.json();
         console.log(json_obj1)
         document.getElementById('source_aqi_value').innerHTML=json_obj1['data'][0]['aqi'];
         document.getElementById('source_aqi_type').innerHTML='unhealthy and sensitive';
         document.getElementById('source_aqi_type').style.color='#b8b340';
+        ///////////////////////
+        if(parseInt(json_obj1['data'][0]['aqi'])<51)
+        {
+            //console.log('green')
+            source_color='#2d6102';
+            document.getElementById('source_aqi_value').innerHTML='healthy environment';
+            document.getElementById('source_aqi_value').style.color=source_color;
+        }
+        else if(parseInt(json_obj1['data'][0]['aqi'])<101)
+        {
+            //console.log('light green')
+            source_color='#7aa358';
+            document.getElementById('source_aqi_value').innerHTML='moderately healthy environment';
+            document.getElementById('source_aqi_value').style.color=source_color;
+        }
+        else if(parseInt(json_obj1['data'][0]['aqi'])<201)
+        {
+            //console.log('yellow');
+            source_color='#b8b340';
+            document.getElementById('source_aqi_value').innerHTML='unhealthy environment';
+            document.getElementById('source_aqi_value').style.color=source_color;
+        }
+        else if(parseInt(json_obj1['data'][0]['aqi'])<301)
+        {
+          source_color='#f09c0c';
+            document.getElementById('source_aqi_value').innerHTML='unhealthy and sensitive environment';
+            document.getElementById('source_aqi_value').style.color=source_color;
+        }
+        else if(parseInt(json_obj1['data'][0]['aqi'])<401)
+        {
+          source_color='#ab6f59';
+            document.getElementById('source_aqi_value').innerHTML='Very unhealhy environment';
+            document.getElementById('source_aqi_value').style.color=source_color;
+        }
+        else if(parseInt(json_obj1['data'][0]['aqi'])>401)
+        {
+          source_color='#8b0000';
+            document.getElementById('source_aqi_value').innerHTML='Hazardous environment';
+            document.getElementById('source_aqi_value').style.color=source_color;
+        }
+        ///////////////////
         const r2=await fetch('https://api.weatherbit.io/v2.0/current/airquality?lat='+end[1]+'&lon='+end[0]+'&key=c64a2e43708941bd9ac4450b13d6c235');
         const json_obj2 = await r2.json();
         console.log(json_obj2)
         document.getElementById('dest_aqi_value').innerHTML=json_obj2['data'][0]['aqi'];
-        document.getElementById('dest_aqi_type').innerHTML='<style>unhealthy and sensitive';
+        document.getElementById('dest_aqi_type').innerHTML='unhealthy and sensitive';
         if(parseInt(json_obj2['data'][0]['aqi'])<51)
         {
             //console.log('green')
@@ -194,231 +252,301 @@
             document.getElementById('dest_aqi_type').innerHTML='Very unhealhy environment';
             document.getElementById('dest_aqi_type').style.color=dest_color;
         }
-        else
+        else if(parseInt(json_obj2['data'][0]['aqi'])>401)
         {
             dest_color='#8b0000';
             document.getElementById('dest_aqi_type').innerHTML='Hazardous environment';
             document.getElementById('dest_aqi_type').style.color=dest_color;
         }
     }
-    // create a function to make a directions request
-    function getRoute(end) {
-        // make a directions request using cycling profile
-        // an arbitrary start will always be the same
-        // only the end or destination will change
-        var start = [88.36972045898438, 22.569719314575195];//[lng,lat]
-        var transport_mode_array=['cycling','walking','driving'];
-        if(transport_mode_array[parseInt(document.getElementById('inputGroupSelect01').value)-1]==undefined)
+    
+    //ipgeocode function of radar.io
+    Radar.ipGeocode(function(err, result) 
+    {
+        if (err) 
         {
-            var transport_mode='walking';
+          console.error(err);
         }
-        else
+        if (result && result.address) 
         {
-            var transport_mode=transport_mode_array[parseInt(document.getElementById('inputGroupSelect01').value)-1];
-        }
-        console.log(transport_mode);
-        
-        var url = 'https://api.mapbox.com/directions/v5/mapbox/'+transport_mode+'/' + start[0] + ',' + start[1] + ';' + end[0] + ',' + end[1] + '?steps=true&geometries=geojson&access_token=' + mapboxgl.accessToken;
-
-        // make an XHR request https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
-        var req = new XMLHttpRequest();
-        req.open('GET', url, true);
-        req.onload = function () {
-            var json = JSON.parse(req.response);
-            
-            var data = json.routes[0];
-            console.log(data);
-            document.getElementById('distance_value').innerHTML=data['distance'] +'  '+'   meters';
-            document.getElementById('time_required').innerHTML=data['duration']+' seconds';
-            if(transport_mode=='driving')
+            var dest_color='#b8b340';
+            var source_color='#b8b340';
+            var map = new mapboxgl.Map(
             {
-                document.getElementById('carbon_footprint').value= parseFloat(data['distance']*0.0004);
-                console.log(parseFloat(data['distance']*0.0004))
-                document.getElementById('offset_cost').innerHTML= parseFloat(data['distance']*0.0004*0.9);
-            }
-            
-            // get the sidebar and add the instructions
-            var instructions = document.getElementById('instructions');
-            var steps = data.legs[0].steps;
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v10',
+            center: [result.address.longitude , result.address.latitude], // starting position
+            zoom: 12
+            });
+            // initialize the map canvas to interact with later
+            var canvas = map.getCanvasContainer();
+            // only the end or destination will change
+            var start = [result.address.longitude , result.address.latitude];
 
-            var tripInstructions = [];
-            for (var i = 0; i < steps.length; i++) {
-              tripInstructions.push('<br><li>' + steps[i].maneuver.instruction) + '</li>';
-              instructions.innerHTML = '<br><span class="duration">Trip duration: ' + Math.floor(data.duration / 60) + ' min 🚴 </span>' + tripInstructions;
-            }
+            // 1.this is where the code for the next step will go
+            function getRoute(end) 
+            {
+              // set transport mode
+              var transport_mode_array=['cycling','walking','driving'];
+              if(transport_mode_array[parseInt(document.getElementById('inputGroupSelect01').value)-1]==undefined)
+              {
+                  var transport_mode='walking';
+              }
+              else
+              {
+                  var transport_mode=transport_mode_array[parseInt(document.getElementById('inputGroupSelect01').value)-1];
+              }
+              console.log(transport_mode);
+              // only the end or destination will change
+              var url = 'https://api.mapbox.com/directions/v5/mapbox/cycling/' + start[0] + ',' + start[1] + ';' + end[0] + ',' + end[1] + '?steps=true&geometries=geojson&access_token=' + mapboxgl.accessToken;
 
-            //aqi data
-            aqi_fun(start,end); 
-            //document.getElementById('distance_value').innerHTML=data['distance']+'meters'
-            var route = data.geometry.coordinates;
-            var geojson = {
-                type: 'Feature',
-                properties: {},
-                geometry: {
+              // make an XHR request https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
+              var req = new XMLHttpRequest();
+              req.open('GET', url, true);
+              req.onload = function() 
+              {
+                var json = JSON.parse(req.response);
+                var data = json.routes[0];
+                console.log(data);
+                document.getElementById('distance_value').innerHTML=data['distance'] +'  '+'   meters';
+                document.getElementById('time_required').innerHTML=data['duration']+' seconds';
+                if(transport_mode=='driving')
+                {
+                    document.getElementById('carbon_footprint').value= parseFloat(data['distance']*0.0004);
+                    console.log(parseFloat(data['distance']*0.0004))
+                    // document.getElementById('offset_cost').innerHTML= parseFloat(data['distance']*0.0004*0.9*0.0000065);
+                    document.getElementById('offset_cost_inr').innerHTML= parseFloat(data['distance']*0.0004*0.9);
+                }
+                
+                //aqi data
+                aqi_fun(start,end);
+                var route = data.geometry.coordinates;
+                var geojson = 
+                {
+                  type: 'Feature',
+                  properties: {},
+                  geometry: 
+                  {
                     type: 'LineString',
                     coordinates: route
-                }
-            };
-            // if the route already exists on the map, reset it using setData
-            if (map.getSource('route')) {
-                map.getSource('route').setData(geojson);
-            } else { // otherwise, make a new request
-                
-                map.addLayer({
+                  }
+                };
+                // if the route already exists on the map, reset it using setData
+                if (map.getSource('route')) 
+                {
+                  map.getSource('route').setData(geojson);
+                } 
+                else 
+                { // otherwise, make a new request
+                  map.addLayer(
+                  {
                     id: 'route',
                     type: 'line',
-                    source: {
-                        type: 'geojson',
-                        data: {
-                            type: 'Feature',
-                            properties: {},
-                            geometry: {
-                                type: 'LineString',
-                                coordinates: geojson
-                            }
-                        }
-                    },
-                    layout: {
-                        'line-join': 'round',
-                        'line-cap': 'round'
-                    },
-                    paint: {
-                        'line-color': "#b8b440",
-                        'line-width': 5,
-                        'line-opacity': 0.75
-                    }
-                });
-            }
-            // add turn instructions here at the end
-        };
-        req.send();
-    }
-
-    map.on('load', function () {
-        // make an initial directions request that
-        // starts and ends at the same location
-        getRoute(start);
-        var start_color='#b8b440'
-        // Add starting point to the map
-        map.addLayer({
-            id: 'point',
-            type: 'circle',
-            source: {
-                type: 'geojson',
-                data: {
-                    type: 'FeatureCollection',
-                    features: [{
+                    source: 
+                    {
+                      type: 'geojson',
+                      data: 
+                      {
                         type: 'Feature',
                         properties: {},
-                        geometry: {
-                            type: 'Point',
-                            coordinates: start
+                        geometry: 
+                        {
+                          type: 'LineString',
+                          coordinates: geojson
                         }
+                      }
+                    },
+                    layout: 
+                    {
+                      'line-join': 'round',
+                      'line-cap': 'round'
+                    },
+                    paint: 
+                    {
+                      'line-color': "#b8b440",
+                      'line-width': 5,
+                      'line-opacity': 0.75
+                    }
+                  });
+                }
+                // 3.add turn instructions here at the end
+                // get the sidebar and add the instructions
+                  var instructions = document.getElementById('instructions');
+                  var steps = data.legs[0].steps;
+
+                  var tripInstructions = [];
+                  for (var i = 0; i < steps.length; i++) 
+                  {
+                    tripInstructions.push('<br><li>' + steps[i].maneuver.instruction) + '</li>';
+                    instructions.innerHTML = '<br><span class="duration">Trip duration: ' + Math.floor(data.duration / 60) + ' min 🚴 </span>' + tripInstructions;
+                  }
+              };
+              req.send();
+            }
+
+            map.on('load', function() 
+            {
+              // make an initial directions request that
+              // starts and ends at the same location
+              getRoute(start);
+              // Add starting point to the map
+              map.addLayer(
+              {
+                id: 'point',
+                type: 'circle',
+                source: 
+                {
+                  type: 'geojson',
+                  data: 
+                  {
+                    type: 'FeatureCollection',
+                    features: [
+                      {
+                      type: 'Feature',
+                      properties: {},
+                      geometry: 
+                      {
+                        type: 'Point',
+                        coordinates: start
+                      }
                     }
                     ]
-                }
-            },
-            paint: {
-                'circle-radius': 15,
-                'circle-color': start_color,
-                'circle-opacity': 0.6
-            }
-        });
-        // this is where the code from the next step will go
-    });
-    map.on('click', function (e) {
-        var coordsObj = e.lngLat;
-        canvas.style.cursor = '';
-        var coords = Object.keys(coordsObj).map(function (key) {
-            return coordsObj[key];
-        });
-        console.log(coords,dest_color);
-        var end = {
-            type: 'FeatureCollection',
-            features: [{
-                type: 'Feature',
-                properties: {},
-                geometry: {
-                    type: 'Point',
-                    coordinates: coords
-                }
-            }
-            ],
-            paint: {
-                    'circle-radius': 15,
-                    'circle-opacity': 0.6,
-                    'circle-color': dest_color,
-                    
-                }
-        };
-        if (map.getLayer('end')) {
-            console.log('dest_color');
-            console.log(end);
-            //map.getSource('end').setData(end);
-            map.removeLayer('end')
-            map.removeSource('end');
-            map.addLayer({
-                id: 'end',
-                type: 'circle',
-                source: {
-                    type: 'geojson',
-                    data: {
-                        type: 'FeatureCollection',
-                        features: [{
-                            type: 'Feature',
-                            properties: {},
-                            geometry: {
-                                type: 'Point',
-                                coordinates: coords
-                            }
-                        }]
-                    }
+                  }
                 },
-                paint: {
-                    'circle-radius': 15,
-                    'circle-opacity': 0.6,
-                    'circle-color': dest_color,
+                paint: 
+                {
+                  'circle-radius': 8,
+                  'circle-color': source_color,
+                  'circle-opacity': 0.99
                 }
-            });
-            
-        } else {
-            console.log(dest_color)
-            map.addLayer({
-                id: 'end',
+              });
+              //////////////////
+              map.addLayer(
+              {
+                id: 'pnt',
                 type: 'circle',
-                source: {
-                    type: 'geojson',
-                    data: {
-                        type: 'FeatureCollection',
-                        features: [{
-                            type: 'Feature',
-                            properties: {},
-                            geometry: {
-                                type: 'Point',
-                                coordinates: coords
-                            }
-                        }]
+                source: 
+                {
+                  type: 'geojson',
+                  data: 
+                  {
+                    type: 'FeatureCollection',
+                    features: [
+                      {
+                      type: 'Feature',
+                      properties: {},
+                      geometry: 
+                      {
+                        type: 'Point',
+                        coordinates: start
+                      }
                     }
+                    ]
+                  }
                 },
-                paint: {
-                    'circle-radius': 15,
-                    'circle-opacity': 0.6,
-                    'circle-color': dest_color,
+                paint: 
+                {
+                  'circle-radius': 55,
+                  'circle-color': source_color,
+                  'circle-opacity': 0.4
                 }
+              });
+              ///////////////////
+              // 2.this is where the code from the next step will go
+              map.on('click', function(e) 
+              {
+                var coordsObj = e.lngLat;
+                canvas.style.cursor = '';
+                var coords = Object.keys(coordsObj).map(function(key) 
+                {
+                  return coordsObj[key];
+                });
+                console.log(coords,dest_color);
+                var end = 
+                {
+                  type: 'FeatureCollection',
+                  features: [
+                    {
+                    type: 'Feature',
+                    properties: {},
+                    geometry: 
+                    {
+                      type: 'Point',
+                      coordinates: coords
+                    }
+                  }
+                  ]
+                };
+                if (map.getLayer('end')) 
+                {
+                    console.log('dest_color');
+                    console.log('end');
+                    //map.getSource('end').setData(end);
+                    map.removeLayer('end')
+                    map.removeSource('end');
+                    map.addLayer({
+                        id: 'end',
+                        type: 'circle',
+                        source: {
+                            type: 'geojson',
+                            data: {
+                                type: 'FeatureCollection',
+                                features: [{
+                                    type: 'Feature',
+                                    properties: {},
+                                    geometry: {
+                                        type: 'Point',
+                                        coordinates: coords
+                                    }
+                                }]
+                            }
+                        },
+                        paint: {
+                            'circle-radius': 8,
+                            'circle-opacity': 0.85,
+                            'circle-color': dest_color,
+                        }
+                    });
+                }
+                else 
+                {
+                  console.log('else');
+                  map.addLayer(
+                  {
+                    id: 'end',
+                    type: 'circle',
+                    source: 
+                    {
+                      type: 'geojson',
+                      data: 
+                      {
+                        type: 'FeatureCollection',
+                        features: [
+                        {
+                          type: 'Feature',
+                          properties: {},
+                          geometry: 
+                          {
+                            type: 'Point',
+                            coordinates: coords
+                          }
+                        }]
+                      }
+                    },
+                    paint: 
+                    {
+                      'circle-radius': 8,
+                      'circle-opacity': 0.85,
+                      'circle-color': dest_color,
+                    }
+                  });
+                  
+                }
+                getRoute(coords);
+              });
             });
         }
-        getRoute(coords);
     });
 
-    // get the sidebar and add the instructions
-// var instructions = document.getElementById('instructions');
-// var steps = data.legs[0].steps;
-
-// var tripInstructions = [];
-// for (var i = 0; i < steps.length; i++) {
-//   tripInstructions.push('<br><li>' + steps[i].maneuver.instruction) + '</li>';
-//   instructions.innerHTML = '<br><span class="duration">Trip duration: ' + Math.floor(data.duration / 60) + ' min 🚴 </span>' + tripInstructions;
-// }
 </script>
 
-</html>
